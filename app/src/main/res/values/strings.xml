@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hexa</string>
+    <string name="settings_title">Definições do Hexa</string>
+    <string name="media_listener_label">Hexa — controlo de música</string>
+</resources>

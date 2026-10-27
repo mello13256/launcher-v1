@@ -107,6 +107,9 @@ class ComboEngine(
     /** True when a tap on [hive] (with nothing pending) waits for the window instead of firing at once. */
     fun mayWait(hive: Int): Boolean = tapsEnabled && matcher.canStart(hive)
 
+    /** True when a swipe starting on [hive] could form a combination. */
+    fun canStartSwipe(hive: Int): Boolean = swipeEnabled && matcher.canStart(hive)
+
     fun onTap(hive: Int, eventTime: Long) {
         if (buffer.isNotEmpty() && eventTime - lastEventTime > windowMs) {
             // The window has already expired but the timer has not run yet (busy main thread).

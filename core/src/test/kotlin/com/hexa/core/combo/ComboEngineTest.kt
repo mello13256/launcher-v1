@@ -274,6 +274,20 @@ class ComboEngineTest {
     }
 
     @Test
+    fun waitingIsDecidedPerHiveAndInputMode() = runTest {
+        val both = harness(combo("ab", A, B, ordered = true))
+        assertTrue(both.engine.mayWait(A))
+        assertFalse(both.engine.mayWait(B))
+        assertTrue(both.engine.canStartSwipe(A))
+        assertFalse(both.engine.canStartSwipe(X))
+        val swipeOnly = harness(combo("ab", A, B, ordered = true), input = ComboInput.SWIPE)
+        assertFalse(swipeOnly.engine.mayWait(A))
+        assertTrue(swipeOnly.engine.canStartSwipe(A))
+        val tapsOnly = harness(combo("ab", A, B, ordered = true), input = ComboInput.TAPS)
+        assertFalse(tapsOnly.engine.canStartSwipe(A))
+    }
+
+    @Test
     fun disabledCombosAreIgnored() = runTest {
         val h = harness(combo("ab", A, B).copy(enabled = false))
         h.engine.onTap(A, t)

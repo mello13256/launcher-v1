@@ -1,0 +1,6 @@
+# Startup and interaction paths of the launcher, compiled ahead of time by ProfileInstaller.
+# Compose and AndroidX libraries ship their own profiles, merged automatically.
+HSPLcom/hexa/launcher/**->**(**)**
+HSPLcom/hexa/core/**->**(**)**
+Lcom/hexa/launcher/**;
+Lcom/hexa/core/**;

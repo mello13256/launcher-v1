@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Seven-cell honeycomb, the larger centre cell in violet. Safe zone: 66dp circle in 108dp. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:fillColor="#FF7C4DFF" android:pathData="M54,38 L67.9,46 L67.9,62 L54,70 L40.1,62 L40.1,46 Z" />
+    <path android:fillColor="#FF3D5AFE" android:pathData="M54,22.5 L62.2,27.2 L62.2,36.7 L54,41.4 L45.8,36.7 L45.8,27.2 Z" />
+    <path android:fillColor="#FFFF4081" android:pathData="M72.5,33.2 L80.7,37.9 L80.7,47.4 L72.5,52.1 L64.3,47.4 L64.3,37.9 Z" />
+    <path android:fillColor="#FFFFAB00" android:pathData="M72.5,55.9 L80.7,60.6 L80.7,70.1 L72.5,74.8 L64.3,70.1 L64.3,60.6 Z" />
+    <path android:fillColor="#FF00C853" android:pathData="M54,66.6 L62.2,71.3 L62.2,80.8 L54,85.5 L45.8,80.8 L45.8,71.3 Z" />
+    <path android:fillColor="#FF00B8D4" android:pathData="M35.5,55.9 L43.7,60.6 L43.7,70.1 L35.5,74.8 L27.3,70.1 L27.3,60.6 Z" />
+    <path android:fillColor="#FFD500F9" android:pathData="M35.5,33.2 L43.7,37.9 L43.7,47.4 L35.5,52.1 L27.3,47.4 L27.3,37.9 Z" />
+</vector>

@@ -7,8 +7,9 @@ data class MusicSnapshot(
     val artist: String?,
     val album: String?,
     val isPlaying: Boolean,
-    /** Position in ms at [positionUpdatedAt] (uptime ms), or -1 when unknown. */
+    /** Position in ms at [positionUpdatedAt], or -1 when unknown. */
     val position: Long,
+    /** Monotonic clock in ms (Android: SystemClock.elapsedRealtime, as reported by PlaybackState). */
     val positionUpdatedAt: Long,
     val speed: Float,
     /** Duration in ms, or <= 0 when unknown (live streams, some players). */
@@ -20,7 +21,7 @@ data class MusicSnapshot(
 ) {
     val hasProgress: Boolean get() = duration > 0 && position >= 0
 
-    /** Extrapolated position at [now] (uptime ms), clamped to the duration. */
+    /** Extrapolated position at [now] (same clock as [positionUpdatedAt]), clamped to the duration. */
     fun positionAt(now: Long): Long {
         if (position < 0) return -1
         val elapsed = if (isPlaying) ((now - positionUpdatedAt) * speed).toLong().coerceAtLeast(0) else 0
