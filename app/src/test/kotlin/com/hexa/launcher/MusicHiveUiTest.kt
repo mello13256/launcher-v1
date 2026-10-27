@@ -47,8 +47,9 @@ class MusicHiveUiTest {
                         state = MusicState(access = MusicAccess.MEDIA_KEYS_ONLY),
                         appLabel = null,
                         expanded = expanded,
-                        compact = Rect(900f, 40f, 990f, 144f),
-                        expandedRect = Rect(40f, 40f, 1000f, 560f),
+                        // Robolectric's default screen is 320x470 px (mdpi): keep both rects on screen.
+                        compact = Rect(250f, 10f, 295f, 62f),
+                        expandedRect = Rect(10f, 10f, 310f, 220f),
                         color = Color.DarkGray,
                         onTap = { overlays.toggleMusic(); expanded = overlays.isMusicExpanded },
                         onLongPress = {},

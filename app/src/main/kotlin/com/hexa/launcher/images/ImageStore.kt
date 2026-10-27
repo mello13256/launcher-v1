@@ -75,7 +75,26 @@ class ImageStore(context: Context, private val io: CoroutineDispatcher) {
 
     fun trim() = cache.evictAll()
 
-    private fun decodeScaled(uri: Uri, maxSide: Int): Bitmap? {
+    private fun decodeScaled(uri: Uri, maxSide: Int): Bitmap? =
+        if (Build.VERSION.SDK_INT >= 28) decodeWithImageDecoder(uri, maxSide) else decodeWithBitmapFactory(uri, maxSide)
+
+    /** Android 8.x: two-pass BitmapFactory decode with a power-of-two sample size, then exact scale. */
+    private fun decodeWithBitmapFactory(uri: Uri, maxSide: Int): Bitmap? {
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        resolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
+        val longest = max(bounds.outWidth, bounds.outHeight)
+        if (longest <= 0) return null
+        var sample = 1
+        while (longest / (sample * 2) >= maxSide) sample *= 2
+        val opts = BitmapFactory.Options().apply { inSampleSize = sample }
+        val decoded = resolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, opts) } ?: return null
+        val scale = min(1f, maxSide.toFloat() / max(decoded.width, decoded.height).toFloat())
+        if (scale >= 1f) return decoded
+        return Bitmap.createScaledBitmap(decoded, (decoded.width * scale).roundToInt().coerceAtLeast(1), (decoded.height * scale).roundToInt().coerceAtLeast(1), true)
+    }
+
+    @androidx.annotation.RequiresApi(28)
+    private fun decodeWithImageDecoder(uri: Uri, maxSide: Int): Bitmap? {
         val source = ImageDecoder.createSource(resolver, uri)
         return ImageDecoder.decodeBitmap(source) { decoder, info, _ ->
             val w = info.size.width
