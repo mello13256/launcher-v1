@@ -28,7 +28,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -211,7 +210,7 @@ private fun ExpandedPlayer(
             Row(verticalAlignment = Alignment.Top) {
                 Column(Modifier.weight(1f)) {
                     Text(display.title, color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    Text(display.subtitle, color = Color.White.copy(alpha = 0.72f), fontSize = 13.sp, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    Text(display.subtitle, color = Color.White.copy(alpha = 0.72f), fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 Box(
                     Modifier
@@ -223,9 +222,12 @@ private fun ExpandedPlayer(
                 ) { GlyphIcon(Glyph.CLOSE, Color.White.copy(alpha = 0.8f), size = 16.dp) }
             }
             if (display.showAccessHint) {
-                TextButton(onClick = onRequestAccess, modifier = Modifier.height(32.dp)) {
-                    Text("Permitir acesso", color = HexaColors.Accent, fontSize = 13.sp)
-                }
+                Text(
+                    "Permitir acesso ›",
+                    color = HexaColors.Accent,
+                    fontSize = 13.sp,
+                    modifier = Modifier.clip(RoundedCornerShape(8.dp)).clickable(onClick = onRequestAccess).padding(vertical = 2.dp),
+                )
             } else {
                 Text(display.statusLabel, color = HexaColors.Accent, fontSize = 12.sp, maxLines = 1)
             }

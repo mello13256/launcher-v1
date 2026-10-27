@@ -125,7 +125,8 @@ private fun HomeContent(
         }
         val compact = Rect(musicLeft, musicTopPx, musicLeft + musicW, musicTopPx + musicH)
         val expW = min(width - insetLeft - insetRight - 2 * margin, px(440f))
-        val expH = px(196f)
+        // Taller with large fonts so the controls never overflow the card.
+        val expH = px(196f) * density.fontScale.coerceIn(1f, 1.6f)
         val expLeft = if (musicStart) insetLeft + margin else width - insetRight - margin - expW
         val expTop = if (musicTop) insetTop + margin else height - insetBottom - margin - expH
         val expanded = Rect(expLeft, expTop, expLeft + expW, expTop + expH)

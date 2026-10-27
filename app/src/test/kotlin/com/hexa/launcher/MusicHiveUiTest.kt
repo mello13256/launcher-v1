@@ -12,7 +12,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.printToString
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hexa.core.home.HomeOverlays
 import com.hexa.core.music.MusicAccess
@@ -49,7 +51,7 @@ class MusicHiveUiTest {
                         expanded = expanded,
                         // Robolectric's default screen is 320x470 px (mdpi): keep both rects on screen.
                         compact = Rect(250f, 10f, 295f, 62f),
-                        expandedRect = Rect(10f, 10f, 310f, 220f),
+                        expandedRect = Rect(0f, 0f, 320f, 240f),
                         color = Color.DarkGray,
                         onTap = { overlays.toggleMusic(); expanded = overlays.isMusicExpanded },
                         onLongPress = {},
@@ -70,9 +72,11 @@ class MusicHiveUiTest {
         compose.onNodeWithContentDescription("Fechar widget de música").assertIsDisplayed()
 
         // Controls work without notification access (media keys).
-        compose.onNodeWithContentDescription("Reproduzir").performClick()
+        compose.onNodeWithContentDescription("Reproduzir").assertIsDisplayed().performClick()
         compose.waitForIdle()
-        compose.runOnIdle { assertEquals(1, playPause) }
+        compose.runOnIdle {
+            assertEquals("semantics:\n" + compose.onRoot(useUnmergedTree = true).printToString(), 1, playPause)
+        }
 
         compose.onNodeWithContentDescription("Fechar widget de música").performClick()
         compose.waitForIdle()
