@@ -71,7 +71,8 @@ class MusicHiveUiTest {
 
         // Controls work without notification access (media keys).
         compose.onNodeWithContentDescription("Reproduzir").performClick()
-        assertEquals(1, playPause)
+        compose.waitForIdle()
+        compose.runOnIdle { assertEquals(1, playPause) }
 
         compose.onNodeWithContentDescription("Fechar widget de música").performClick()
         compose.waitForIdle()
