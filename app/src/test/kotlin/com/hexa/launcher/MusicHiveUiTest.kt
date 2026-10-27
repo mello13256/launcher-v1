@@ -28,10 +28,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import org.robolectric.annotation.GraphicsMode
 
 /** Expanding the music hive into the widget and closing it back to the compact hexagon. */
 @RunWith(AndroidJUnit4::class)
 @Config(application = android.app.Application::class) // no launcher graph needed for this UI test
+@GraphicsMode(GraphicsMode.Mode.NATIVE) // real text metrics and path hit-testing
 class MusicHiveUiTest {
 
     @get:Rule
@@ -72,10 +74,11 @@ class MusicHiveUiTest {
         compose.onNodeWithContentDescription("Fechar widget de música").assertIsDisplayed()
 
         // Controls work without notification access (media keys).
+        val before = compose.onRoot(useUnmergedTree = true).printToString()
         compose.onNodeWithContentDescription("Reproduzir").assertIsDisplayed().performClick()
         compose.waitForIdle()
         compose.runOnIdle {
-            assertEquals("semantics:\n" + compose.onRoot(useUnmergedTree = true).printToString(), 1, playPause)
+            assertEquals("semantics before click:\n$before", 1, playPause)
         }
 
         compose.onNodeWithContentDescription("Fechar widget de música").performClick()
