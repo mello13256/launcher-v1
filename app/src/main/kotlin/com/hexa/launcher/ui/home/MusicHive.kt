@@ -106,58 +106,63 @@ fun MusicHive(
     val shape = remember(t, corner) { MorphShape(t, 0.16f, corner) }
     val display = MusicDisplay.from(state.snapshot, state.access, appLabel)
 
-    if (t > 0f) {
-        // Tapping outside closes the widget.
-        Box(
-            Modifier
-                .fillMaxSize()
-                .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null, onClick = onCollapse),
-        )
-    }
-
+    // Full-screen container: while the widget is open it catches taps outside the card (closing
+    // it). The card is its child, so the card's own controls always receive their touches first.
     Box(
         Modifier
-            .offset { IntOffset(rect.left.roundToInt(), rect.top.roundToInt()) }
-            .size(with(density) { rect.width.toDp() }, with(density) { rect.height.toDp() })
-            .graphicsLayer {
-                this.shape = shape
-                clip = true
-            }
-            .background(color)
+            .fillMaxSize()
             .then(
-                if (t < 0.5f) {
-                    Modifier
-                        .combinedClickable(onClick = onTap, onLongClick = onLongPress)
-                        .semantics { contentDescription = if (display.isPlaying) "Música: ${display.title}" else "Música" }
+                if (t > 0f) {
+                    Modifier.clickable(interactionSource = remember { MutableInteractionSource() }, indication = null, onClick = onCollapse)
                 } else {
-                    Modifier.clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) { }
+                    Modifier
                 },
             ),
     ) {
-        if (t < 0.5f) {
-            val a = 1f - t * 2f
-            Canvas(Modifier.fillMaxSize().alpha(a)) {
-                drawGlyph(Glyph.NOTE, center, size.minDimension * 0.46f, Color.White)
-                if (display.isPlaying) {
-                    // Small "live" dot when something is playing.
-                    drawCircle(HexaColors.Accent, size.minDimension * 0.07f, Offset(size.width * 0.5f, size.height * 0.86f))
+        Box(
+            Modifier
+                .offset { IntOffset(rect.left.roundToInt(), rect.top.roundToInt()) }
+                .size(with(density) { rect.width.toDp() }, with(density) { rect.height.toDp() })
+                .graphicsLayer {
+                    this.shape = shape
+                    clip = true
+                }
+                .background(color)
+                .then(
+                    if (t < 0.5f) {
+                        Modifier
+                            .combinedClickable(onClick = onTap, onLongClick = onLongPress)
+                            .semantics { contentDescription = if (display.isPlaying) "Música: ${display.title}" else "Música" }
+                    } else {
+                        Modifier.clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) { }
+                    },
+                ),
+        ) {
+            if (t < 0.5f) {
+                val a = 1f - t * 2f
+                Canvas(Modifier.fillMaxSize().alpha(a)) {
+                    drawGlyph(Glyph.NOTE, center, size.minDimension * 0.46f, Color.White)
+                    if (display.isPlaying) {
+                        // Small "live" dot when something is playing.
+                        drawCircle(HexaColors.Accent, size.minDimension * 0.07f, Offset(size.width * 0.5f, size.height * 0.86f))
+                    }
                 }
             }
-        }
-        if (t > 0.5f) {
-            ExpandedPlayer(
-                state = state,
-                display = display,
-                visible = expanded,
-                modifier = Modifier.fillMaxSize().alpha((t - 0.5f) * 2f),
-                onClose = onCollapse,
-                onPlayPause = onPlayPause,
-                onNext = onNext,
-                onPrevious = onPrevious,
-                onSeek = onSeek,
-                onOpenPlayer = onOpenPlayer,
-                onRequestAccess = onRequestAccess,
-            )
+            if (t > 0.5f) {
+                ExpandedPlayer(
+                    state = state,
+                    display = display,
+                    visible = expanded,
+                    modifier = Modifier.fillMaxSize().alpha((t - 0.5f) * 2f),
+                    onClose = onCollapse,
+                    onPlayPause = onPlayPause,
+                    onNext = onNext,
+                    onPrevious = onPrevious,
+                    onSeek = onSeek,
+                    onOpenPlayer = onOpenPlayer,
+                    onRequestAccess = onRequestAccess,
+                )
+            }
         }
     }
 }
